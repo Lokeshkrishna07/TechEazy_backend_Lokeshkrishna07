@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "Parcel API - SQLite",
+    "_postman_id": "abc123-xyz456-parcelapi",
+    "description": "API for creating and retrieving parcels using FastAPI with SQLite.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Parcel",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"tracking_id\": \"TRK123\",\n  \"sender\": \"Lokesh Krishna\",\n  \"recipient\": \"Ravi Teja\",\n  \"status\": \"Shipped\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/parcels",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["parcels"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get All Parcels",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/parcels",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["parcels"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Parcel by Tracking ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:8000/parcels/TRK123",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["parcels", "TRK123"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
