@@ -1,21 +1,42 @@
 {
   "info": {
-    "name": "Parcel API - SQLite",
-    "_postman_id": "abc123-xyz456-parcelapi",
-    "description": "API for creating and retrieving parcels using FastAPI with SQLite.",
+    "_postman_id": "parcel-api-fastapi-sqlite",
+    "name": "Parcel API with JWT",
+    "description": "FastAPI Parcel Tracking API with JWT authentication, file upload, and vendor/delivery-order relation",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
     {
-      "name": "Create Parcel",
+      "name": "Login - Get Token",
       "request": {
         "method": "POST",
         "header": [
-          { "key": "Content-Type", "value": "application/json" }
+          { "key": "Content-Type", "value": "application/x-www-form-urlencoded" }
         ],
         "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            { "key": "username", "value": "admin", "type": "text" },
+            { "key": "password", "value": "admin", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/login",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["login"]
+        }
+      }
+    },
+    {
+      "name": "Create Parcel (in memory)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
           "mode": "raw",
-          "raw": "{\n  \"tracking_id\": \"TRK123\",\n  \"sender\": \"Lokesh Krishna\",\n  \"recipient\": \"Ravi Teja\",\n  \"status\": \"Shipped\"\n}"
+          "raw": "{\n  \"tracking_id\": \"TRK123\",\n  \"sender\": \"Alice\",\n  \"recipient\": \"Bob\",\n  \"status\": \"Shipped\"\n}"
         },
         "url": {
           "raw": "http://127.0.0.1:8000/parcels",
@@ -24,8 +45,7 @@
           "port": "8000",
           "path": ["parcels"]
         }
-      },
-      "response": []
+      }
     },
     {
       "name": "Get All Parcels",
@@ -39,8 +59,7 @@
           "port": "8000",
           "path": ["parcels"]
         }
-      },
-      "response": []
+      }
     },
     {
       "name": "Get Parcel by Tracking ID",
@@ -54,8 +73,70 @@
           "port": "8000",
           "path": ["parcels", "TRK123"]
         }
-      },
-      "response": []
+      }
+    },
+    {
+      "name": "Upload Delivery Order (File)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "vendor_name", "value": "Flipkart", "type": "text" },
+            { "key": "subscription_type", "value": "PRIME", "type": "text" },
+            { "key": "order_date", "value": "2025-07-02", "type": "text" },
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/absolute/path/to/parcels.csv"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/upload-order",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["upload-order"]
+        }
+      }
+    },
+    {
+      "name": "Get Today's Delivery Orders (Filtered)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://127.0.0.1:8000/delivery-orders?vendor_id=1&target_date=2025-07-02",
+          "protocol": "http",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["delivery-orders"],
+          "query": [
+            { "key": "vendor_id", "value": "1" },
+            { "key": "target_date", "value": "2025-07-02" }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
     }
   ]
 }
